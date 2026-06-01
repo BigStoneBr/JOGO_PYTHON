@@ -4,7 +4,7 @@ import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.const import WIN_WIDTH, COLOR_ORANGE, MENU_OPTIONS, COLOR_WHITE
+from code.const import WIN_WIDTH, COLOR_ORANGE, MENU_OPTIONS, COLOR_WHITE, COLOR_YELLOW
 
 
 class Menu:
@@ -14,6 +14,7 @@ class Menu:
         self.rect = self.surf.get_rect(left=0, top=0)
 
     def run(self, ):
+        menu_option = 0
         pygame.mixer.music.load('./assets/Menu.mp3')
         pygame.mixer.music.play(-1)
         while True:
@@ -22,7 +23,10 @@ class Menu:
             self.menu_text(50, "Shooter", COLOR_ORANGE, ((WIN_WIDTH / 2), 110))
 
             for i in range(len(MENU_OPTIONS)):
-                self.menu_text(20, MENU_OPTIONS[i], COLOR_WHITE, ((WIN_WIDTH / 2), 200 + 25 * i))
+                if i == menu_option:
+                    self.menu_text(20, MENU_OPTIONS[i], COLOR_YELLOW, ((WIN_WIDTH / 2), 200 + 25 * i))
+                else:
+                    self.menu_text(20, MENU_OPTIONS[i], COLOR_WHITE, ((WIN_WIDTH / 2), 200 + 25 * i))
 
             pygame.display.flip()
 
@@ -31,6 +35,19 @@ class Menu:
                 if event.type == pygame.QUIT:
                     pygame.quit()  # Close Window
                     quit()  # end pygame
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_DOWN:
+                        if menu_option < len(MENU_OPTIONS) - 1:
+                            menu_option += 1
+                        else:
+                            menu_option = 0
+                    if event.key == pygame.K_UP:
+                        if menu_option > 0:
+                            menu_option -= 1
+                        else:
+                            menu_option = len(MENU_OPTIONS) - 1
+                    if event.key == pygame.K_RETURN:
+                        return MENU_OPTIONS[menu_option]
 
     def menu_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple) -> None:
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
