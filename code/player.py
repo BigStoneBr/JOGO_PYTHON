@@ -13,6 +13,7 @@ from code.entity import Entity
 class Player(Entity):
     def __init__(self, nome: str, position: tuple):
         super().__init__(nome, position)
+        self.score = None
         self.shot_delay = ENTITY_SHOT_DELAY[self.name]
 
 
